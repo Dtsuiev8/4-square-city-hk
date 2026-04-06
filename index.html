@@ -1,72 +1,127 @@
-<!DOCTYPE html>
-<html lang="zh-HK">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>香港人嘅四方城 | 18區爭霸戰</title>
-    <!-- 使用 Tailwind CSS 快速美化介面 -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+HK:wght@400;700;900&display=swap');
-        body { 
-            font-family: 'Noto Sans HK', sans-serif; 
-            background-color: #064e3b; 
-            color: #f0fdf4; 
-            background-image: radial-gradient(circle at center, #065f46 0%, #064e3b 100%);
-        }
-        .neon-text { 
-            text-shadow: 0 0 10px #34d399, 0 0 20px #10b981; 
-        }
-        .glass-card {
-            background: rgba(0, 0, 0, 0.4);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(52, 211, 153, 0.3);
-        }
-    </style>
-</head>
-<body class="min-h-screen flex flex-col items-center justify-center p-6 text-center">
-    
-    <div class="max-w-2xl w-full glass-card p-10 rounded-[2rem] shadow-2xl">
-        <!-- 標題部分 -->
-        <h1 class="text-5xl md:text-6xl font-black mb-4 neon-text italic tracking-tighter">
-            香港人嘅四方城
-        </h1>
-        <p class="text-xl md:text-2xl mb-10 text-emerald-200 font-light">
-            真正屬於 18 區嘅麻雀競技平台
-        </p>
-        
-        <!-- 特色簡介 -->
-        <div class="grid gap-4 mb-12 text-left">
-            <div class="bg-emerald-900/40 p-5 rounded-2xl border-l-4 border-yellow-400">
-                <h2 class="text-xl font-bold text-yellow-400 mb-1">🀄 正宗港麻邏輯</h2>
-                <p class="text-emerald-100/80 text-sm">由資深雀友研發，還原最真實嘅食糊感。</p>
-            </div>
-            <div class="bg-emerald-900/40 p-5 rounded-2xl border-l-4 border-emerald-400">
-                <h2 class="text-xl font-bold text-emerald-300 mb-1">🔥 18 區榮譽戰</h2>
-                <p class="text-emerald-100/80 text-sm">代表你住嗰區出戰，爭奪「全港最強地區」稱號！</p>
-            </div>
-        </div>
+  <!DOCTYPE html>
+  <html lang="zh-Hant-HK">
+  <head>
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <title>香港人嘅四方城 - 18區雀王爭霸戰</title>
+      <script src="https://cdn.tailwindcss.com"></script>
+      <link href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" rel="stylesheet">
+      <style>
+          @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+HK:wght@400;700;900&display=swap');
+          body {
+              font-family: 'Noto Sans HK', sans-serif;
+              background-color: #064e3b; /* 專業麻雀綠 */
+              color: #ffffff;
+              overflow-x: hidden;
+          }
+          .glass-card {
+              background: rgba(255, 255, 255, 0.1);
+              backdrop-filter: blur(12px);
+              border: 1px solid rgba(255, 255, 255, 0.2);
+              border-radius: 1.5rem;
+          }
+          .btn-primary {
+              background: linear-gradient(135deg, #22c55e 0%, #15803d 100%);
+              box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.4);
+              transition: all 0.3s ease;
+          }
+          .btn-primary:hover {
+              transform: scale(1.05);
+              box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.5);
+          }
+          .progress-bar {
+              background: linear-gradient(90deg, #fbbf24 0%, #f59e0b 100%);
+          }
+      </style>
+  </head>
+  <body class="min-h-screen flex flex-col items-center px-4 py-10">
+      
+      <!-- Header Section -->
+      <header class="w-full max-w-xl text-center mb-10 animate__animated animate__fadeIn">
+          <div class="inline-block bg-yellow-400 text-green-900 px-4 py-1 rounded-full font-black text-xs mb-4 uppercase tracking-widest shadow-lg">
+              Official Launch · 2026
+          </div>
+          <h1 class="text-5xl md:text-6xl font-black mb-4 text-white drop-shadow-2xl">
+              香港人嘅<br><span class="text-yellow-400">四方城</span>
+          </h1>
+          <p class="text-lg text-green-100 opacity-80 font-medium">
+              18區巡迴 · 雀王爭霸 · 社區交流
+          </p>
+      </header>
 
-        <!-- 行動按鈕 -->
-        <div class="space-y-6">
-            <p class="text-lg font-medium text-emerald-200">立即預約加入首批「大亨」行列：</p>
-            
-            <a href="https://wa.me/85294999231" target="_blank" 
-               class="group relative block w-full bg-emerald-500 hover:bg-emerald-400 text-emerald-950 font-black py-5 rounded-2xl transition-all transform hover:scale-[1.02] active:scale-95 text-2xl shadow-[0_0_20px_rgba(16,185,129,0.4)]">
-                WhatsApp 預約 (D Tsui)
-            </a>
+      <!-- Main Content -->
+      <main class="w-full max-w-xl space-y-6">
+          
+          <!-- Stats Section -->
+          <section class="glass-card p-6 animate__animated animate__fadeInUp" style="animation-delay: 0.2s;">
+              <h2 class="text-xl font-bold mb-4 flex items-center border-b border-white/20 pb-2">
+                  <span class="mr-2">🔥</span> 現時戰況 (18區進度)
+              </h2>
+              <div class="space-y-4">
+                  <div>
+                      <div class="flex justify-between text-sm mb-1">
+                          <span class="font-bold text-yellow-300">1. 觀塘區 (KT)</span>
+                          <span>85% 滿額</span>
+                      </div>
+                      <div class="w-full bg-white/10 h-3 rounded-full overflow-hidden">
+                          <div class="progress-bar h-full" style="width: 85%"></div>
+                      </div>
+                  </div>
+                  <div>
+                      <div class="flex justify-between text-sm mb-1">
+                          <span class="font-bold text-gray-300">2. 沙田區 (ST)</span>
+                          <span>60% 滿額</span>
+                      </div>
+                      <div class="w-full bg-white/10 h-3 rounded-full overflow-hidden">
+                          <div class="progress-bar h-full opacity-70" style="width: 60%"></div>
+                      </div>
+                  </div>
+                  <p class="text-center text-xs text-green-200 pt-2 italic">「你嗰區仲未夠人？快啲叫埋街坊報名！」</p>
+              </div>
+          </section>
 
-            <div class="pt-4 border-t border-emerald-800/50">
-                <p class="text-sm text-emerald-400/70 mb-1">如有查詢請聯絡：</p>
-                <p class="text-emerald-200 font-mono">dtsui88117@gmail.com</p>
-            </div>
-        </div>
-    </div>
+          <!-- CTA Section -->
+          <section class="glass-card p-8 text-center animate__animated animate__fadeInUp" style="animation-delay: 0.4s;">
+              <h3 class="text-2xl font-black mb-6">想挑戰雀王寶座？</h3>
+              <a href="https://wa.me/85294999231?text=你好，我想報名參加「香港人嘅四方城」！" 
+                 target="_blank"
+                 class="btn-primary inline-flex items-center justify-center px-8 py-5 rounded-2xl text-white font-black text-2xl w-full">
+                  <svg class="w-8 h-8 mr-3" fill="currentColor" viewBox="0 0 24 24"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.588-5.946 0-6.556 5.332-11.888 11.888-11.888 3.176 0 6.161 1.237 8.404 3.48s3.481 5.229 3.481 8.406c0 6.555-5.332 11.887-11.888 11.887-2.01 0-3.987-.509-5.731-1.472l-6.253 1.696zm6.359-2.043c1.554.921 3.09 1.403 4.737 1.403 5.409 0 9.811-4.402 9.811-9.811 0-2.618-1.02-5.08-2.871-6.932s-4.314-2.871-6.932-2.871c-5.409 0-9.811 4.402-9.811 9.811 0 1.732.457 3.418 1.32 4.907l-.995 3.635 3.741-.942zm10.121-6.839c-.278-.139-1.645-.812-1.9-.904-.255-.092-.441-.139-.626.139s-.719.904-.881 1.089-.324.208-.602.069c-.278-.139-1.175-.433-2.238-1.381-.827-.738-1.385-1.65-1.547-1.928-.162-.278-.017-.428.122-.566.125-.124.278-.324.417-.486.139-.162.185-.278.278-.463.092-.185.046-.347-.023-.486s-.626-1.507-.858-2.063c-.226-.543-.454-.468-.626-.476-.162-.008-.347-.009-.532-.009s-.486.069-.741.347c-.255.278-.972.95-0.972 2.315s.996 2.686 1.134 2.871c.139.185 1.96 2.993 4.748 4.195.663.287 1.181.458 1.585.587.665.211 1.271.181 1.75.11.533-.079 1.645-.672 1.876-1.321.231-.648.231-1.205.162-1.321-.069-.116-.255-.185-.533-.324z"/></svg>
+                  立即 WhatsApp 報名
+              </a>
+              <div class="mt-6 grid grid-cols-2 gap-4 text-xs font-bold uppercase tracking-widest text-green-200">
+                  <div class="border border-white/20 py-2 rounded-lg">報名費 $0</div>
+                  <div class="border border-white/20 py-2 rounded-lg">勝出獎品豐富</div>
+              </div>
+          </section>
 
-    <!-- 頁尾 -->
-    <footer class="mt-12 text-emerald-600/60 text-xs tracking-widest uppercase">
-        © 2026 4 Square City HK • Project Managed by D Tsui
-    </footer>
+          <!-- Rules Section -->
+          <section class="glass-card p-6 animate__animated animate__fadeInUp" style="animation-delay: 0.6s;">
+              <details class="group">
+                  <summary class="list-none cursor-pointer flex justify-between items-center font-bold text-lg">
+                      <span>📜 賽事規則 (港式麻雀)</span>
+                      <span class="transition group-open:rotate-180 text-yellow-400">▼</span>
+                  </summary>
+                  <div class="mt-4 text-sm text-green-50 space-y-3 border-t border-white/10 pt-4 leading-relaxed">
+                      <p>• <strong>規則：</strong> 採用標準香港牌 (港式) 玩法。</p>
+                      <p>• <strong>起胡：</strong> 三番起胡，上限十番。</p>
+                      <p>• <strong>制度：</strong> 半辣辣制度，全面公平競爭。</p>
+                      <p>• <strong>宗旨：</strong> 嚴禁賭博，純屬社區競技交流。</p>
+                      <p>• <strong>裁判：</strong> 現場裁判擁有最終決定權。</p>
+                  </div>
+              </details>
+          </section>
 
-</body>
-</html>
+      </main>
+
+      <!-- Footer -->
+      <footer class="mt-16 mb-8 text-center text-green-400 text-xs animate__animated animate__fadeIn">
+          <p class="font-bold">© 2026 香港人嘅四方城 PROJECT</p>
+          <p class="mt-1 opacity-60">由 D Tsui 策劃及發起 · 社區博弈交流平台</p>
+      </footer>
+
+      <script>
+          console.log("香港人嘅四方城 2.0 啟動成功！");
+      </script>
+  </body>
+  </html>
