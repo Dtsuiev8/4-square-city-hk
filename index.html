@@ -2,126 +2,241 @@
   <html lang="zh-Hant-HK">
   <head>
       <meta charset="UTF-8">
-      <meta name="viewport" content="width=device-width, initial-scale=1.0">
-      <title>香港人嘅四方城 - 18區雀王爭霸戰</title>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+      <title>香港人四方城 - 3D說唱對戰版</title>
       <script src="https://cdn.tailwindcss.com"></script>
-      <link href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" rel="stylesheet">
+      <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+      <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
       <style>
-          @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+HK:wght@400;700;900&display=swap');
-          body {
-              font-family: 'Noto Sans HK', sans-serif;
-              background-color: #064e3b; /* 專業麻雀綠 */
-              color: #ffffff;
-              overflow-x: hidden;
-          }
-          .glass-card {
-              background: rgba(255, 255, 255, 0.1);
-              backdrop-filter: blur(12px);
-              border: 1px solid rgba(255, 255, 255, 0.2);
-              border-radius: 1.5rem;
-          }
-          .btn-primary {
-              background: linear-gradient(135deg, #22c55e 0%, #15803d 100%);
-              box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.4);
-              transition: all 0.3s ease;
-          }
-          .btn-primary:hover {
-              transform: scale(1.05);
-              box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.5);
-          }
-          .progress-bar {
-              background: linear-gradient(90deg, #fbbf24 0%, #f59e0b 100%);
-          }
+          :root { --mj-green: #064e3b; }
+          body { background-color: var(--mj-green); color: white; font-family: -apple-system, sans-serif; overflow: hidden; touch-action: manipulation; }
+          .mj-table { background: radial-gradient(circle, #065f46 0%, #064e3b 100%); border: 10px solid #3d2b1f; border-radius: 24px; box-shadow: inset 0 0 60px rgba(0,0,0,0.6); }
+          .tile { background: #fff; color: #000; width: 44px; height: 60px; border-radius: 4px; display: inline-flex; align-items: center; justify-content: center; font-size: 2.2rem; font-weight: bold; margin: 2px; border-bottom: 5px solid #bbb; border-right: 2px solid #ddd; cursor: pointer; transition: 0.1s; user-select: none; }
+          .tile:active { transform: translateY(4px); border-bottom: 1px solid #bbb; }
+          .tile.discarded { width: 32px; height: 44px; font-size: 1.5rem; border-bottom: 3px solid #bbb; margin: 1px; }
+          #reg-overlay { background: rgba(0,0,0,0.9); backdrop-filter: blur(10px); }
+          .btn-action { background: linear-gradient(180deg, #fbbf24 0%, #d97706 100%); color: #451a03; font-weight: bold; box-shadow: 0 4px 0 #92400e; }
+          .btn-win { background: linear-gradient(180deg, #ef4444 0%, #b91c1c 100%); color: white; box-shadow: 0 4px 0 #7f1d1d; }
+          .winning-anim { animation: flash 0.6s infinite; color: #facc15; font-weight: bold; }
+          @keyframes flash { 0%, 100% { opacity: 1; } 50% { opacity: 0.4; } }
+          .custom-scroll::-webkit-scrollbar { width: 4px; }
+          .custom-scroll::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.2); border-radius: 10px; }
       </style>
   </head>
-  <body class="min-h-screen flex flex-col items-center px-4 py-10">
-      
-      <!-- Header Section -->
-      <header class="w-full max-w-xl text-center mb-10 animate__animated animate__fadeIn">
-          <div class="inline-block bg-yellow-400 text-green-900 px-4 py-1 rounded-full font-black text-xs mb-4 uppercase tracking-widest shadow-lg">
-              Official Launch · 2026
-          </div>
-          <h1 class="text-5xl md:text-6xl font-black mb-4 text-white drop-shadow-2xl">
-              香港人嘅<br><span class="text-yellow-400">四方城</span>
-          </h1>
-          <p class="text-lg text-green-100 opacity-80 font-medium">
-              18區巡迴 · 雀王爭霸 · 社區交流
-          </p>
-      </header>
+  <body class="p-2 flex flex-col items-center min-h-screen">
 
-      <!-- Main Content -->
-      <main class="w-full max-w-xl space-y-6">
-          
-          <!-- Stats Section -->
-          <section class="glass-card p-6 animate__animated animate__fadeInUp" style="animation-delay: 0.2s;">
-              <h2 class="text-xl font-bold mb-4 flex items-center border-b border-white/20 pb-2">
-                  <span class="mr-2">🔥</span> 現時戰況 (18區進度)
-              </h2>
+      <!-- 背景音樂 (請確保檔案名為 bgm.aac) -->
+      <audio id="bg-music" loop>
+          <source src="bgm.aac" type="audio/aac">
+      </audio>
+
+      <!-- 1. 玩家註冊介面 -->
+      <div id="reg-overlay" class="fixed inset-0 z-50 flex items-center justify-center p-6 hidden">
+          <div class="bg-white text-black p-8 rounded-3xl w-full max-w-sm shadow-2xl text-center">
+              <h2 class="text-3xl font-black mb-6 text-green-900">🀄 雀友登記</h2>
               <div class="space-y-4">
-                  <div>
-                      <div class="flex justify-between text-sm mb-1">
-                          <span class="font-bold text-yellow-300">1. 觀塘區 (KT)</span>
-                          <span>85% 滿額</span>
-                      </div>
-                      <div class="w-full bg-white/10 h-3 rounded-full overflow-hidden">
-                          <div class="progress-bar h-full" style="width: 85%"></div>
-                      </div>
-                  </div>
-                  <div>
-                      <div class="flex justify-between text-sm mb-1">
-                          <span class="font-bold text-gray-300">2. 沙田區 (ST)</span>
-                          <span>60% 滿額</span>
-                      </div>
-                      <div class="w-full bg-white/10 h-3 rounded-full overflow-hidden">
-                          <div class="progress-bar h-full opacity-70" style="width: 60%"></div>
-                      </div>
-                  </div>
-                  <p class="text-center text-xs text-green-200 pt-2 italic">「你嗰區仲未夠人？快啲叫埋街坊報名！」</p>
+                  <input type="text" id="reg-name" class="w-full border-2 border-gray-200 p-4 rounded-2xl text-lg outline-none focus:border-green-600" placeholder="輸入你的大名">
+                  <select id="reg-district" class="w-full border-2 border-gray-200 p-4 rounded-2xl text-lg outline-none">
+                      <option value="觀塘">觀塘</option><option value="沙田">沙田</option><option value="旺角">旺角</option>
+                      <option value="屯門">屯門</option><option value="元朗">元朗</option><option value="大埔">大埔</option>
+                      <option value="荃灣">荃灣</option><option value="將軍澳">將軍澳</option><option value="銅鑼灣">銅鑼灣</option>
+                      <option value="中西區">中西區</option><option value="其他">其他地區</option>
+                  </select>
+                  <button onclick="saveProfile()" class="w-full bg-green-700 text-white font-bold py-4 rounded-2xl text-xl shadow-lg active:scale-95 transition">開始對戰</button>
               </div>
-          </section>
+          </div>
+      </div>
 
-          <!-- CTA Section -->
-          <section class="glass-card p-8 text-center animate__animated animate__fadeInUp" style="animation-delay: 0.4s;">
-              <h3 class="text-2xl font-black mb-6">想挑戰雀王寶座？</h3>
-              <a href="https://wa.me/85294999231?text=你好，我想報名參加「香港人嘅四方城」！" 
-                 target="_blank"
-                 class="btn-primary inline-flex items-center justify-center px-8 py-5 rounded-2xl text-white font-black text-2xl w-full">
-                  <svg class="w-8 h-8 mr-3" fill="currentColor" viewBox="0 0 24 24"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.588-5.946 0-6.556 5.332-11.888 11.888-11.888 3.176 0 6.161 1.237 8.404 3.48s3.481 5.229 3.481 8.406c0 6.555-5.332 11.887-11.888 11.887-2.01 0-3.987-.509-5.731-1.472l-6.253 1.696zm6.359-2.043c1.554.921 3.09 1.403 4.737 1.403 5.409 0 9.811-4.402 9.811-9.811 0-2.618-1.02-5.08-2.871-6.932s-4.314-2.871-6.932-2.871c-5.409 0-9.811 4.402-9.811 9.811 0 1.732.457 3.418 1.32 4.907l-.995 3.635 3.741-.942zm10.121-6.839c-.278-.139-1.645-.812-1.9-.904-.255-.092-.441-.139-.626.139s-.719.904-.881 1.089-.324.208-.602.069c-.278-.139-1.175-.433-2.238-1.381-.827-.738-1.385-1.65-1.547-1.928-.162-.278-.017-.428.122-.566.125-.124.278-.324.417-.486.139-.162.185-.278.278-.463.092-.185.046-.347-.023-.486s-.626-1.507-.858-2.063c-.226-.543-.454-.468-.626-.476-.162-.008-.347-.009-.532-.009s-.486.069-.741.347c-.255.278-.972.95-0.972 2.315s.996 2.686 1.134 2.871c.139.185 1.96 2.993 4.748 4.195.663.287 1.181.458 1.585.587.665.211 1.271.181 1.75.11.533-.079 1.645-.672 1.876-1.321.231-.648.231-1.205.162-1.321-.069-.116-.255-.185-.533-.324z"/></svg>
-                  立即 WhatsApp 報名
-              </a>
-              <div class="mt-6 grid grid-cols-2 gap-4 text-xs font-bold uppercase tracking-widest text-green-200">
-                  <div class="border border-white/20 py-2 rounded-lg">報名費 $0</div>
-                  <div class="border border-white/20 py-2 rounded-lg">勝出獎品豐富</div>
+      <!-- 2. 頂部資訊 -->
+      <div class="w-full max-w-md flex justify-between items-end mb-2 px-2">
+          <div>
+              <h1 class="text-2xl font-black text-yellow-400 tracking-tight">香港人四方城</h1>
+              <div class="flex items-center gap-2 mt-1">
+                  <p id="player-info" class="text-[11px] text-green-200 bg-green-900/40 px-2 py-0.5 rounded-full border border-white/10">連線中...</p>
+                  <button onclick="toggleMusic()" id="music-btn" class="text-[9px] bg-white/10 px-2 py-0.5 rounded-full border border-white/10">🎵 ON</button>
               </div>
-          </section>
+          </div>
+          <div class="text-right">
+              <span class="text-[10px] opacity-50 block uppercase">Wall</span>
+              <div id="deck-count" class="text-3xl font-black text-white leading-none">144</div>
+          </div>
+      </div>
 
-          <!-- Rules Section -->
-          <section class="glass-card p-6 animate__animated animate__fadeInUp" style="animation-delay: 0.6s;">
-              <details class="group">
-                  <summary class="list-none cursor-pointer flex justify-between items-center font-bold text-lg">
-                      <span>📜 賽事規則 (港式麻雀)</span>
-                      <span class="transition group-open:rotate-180 text-yellow-400">▼</span>
-                  </summary>
-                  <div class="mt-4 text-sm text-green-50 space-y-3 border-t border-white/10 pt-4 leading-relaxed">
-                      <p>• <strong>規則：</strong> 採用標準香港牌 (港式) 玩法。</p>
-                      <p>• <strong>起胡：</strong> 三番起胡，上限十番。</p>
-                      <p>• <strong>制度：</strong> 半辣辣制度，全面公平競爭。</p>
-                      <p>• <strong>宗旨：</strong> 嚴禁賭博，純屬社區競技交流。</p>
-                      <p>• <strong>裁判：</strong> 現場裁判擁有最終決定權。</p>
-                  </div>
-              </details>
-          </section>
+      <!-- 3. 遊戲公海 -->
+      <div class="w-full max-w-md mj-table p-3 min-h-[300px] mb-3 flex flex-col">
+          <div id="discard-pile" class="flex flex-wrap content-start gap-1 flex-1 overflow-y-auto custom-scroll"></div>
+      </div>
 
-      </main>
+      <!-- 4. 我的手牌 -->
+      <div class="w-full max-w-md bg-black/30 rounded-2xl p-3 mb-3 border border-white/10">
+          <div class="flex justify-between items-center mb-2">
+              <span class="text-xs font-bold text-yellow-500">我的手牌</span>
+              <div class="flex gap-2">
+                  <button onclick="sortHand()" class="text-[10px] bg-white/10 px-2 py-1 rounded-lg">理牌</button>
+                  <button onclick="clearMyHand()" class="text-[10px] bg-red-900/20 px-2 py-1 rounded-lg text-red-200">清空</button>
+              </div>
+          </div>
+          <div id="my-hand" class="flex flex-wrap justify-center min-h-[65px] gap-1"></div>
+      </div>
 
-      <!-- Footer -->
-      <footer class="mt-16 mb-8 text-center text-green-400 text-xs animate__animated animate__fadeIn">
-          <p class="font-bold">© 2026 香港人嘅四方城 PROJECT</p>
-          <p class="mt-1 opacity-60">由 D Tsui 策劃及發起 · 社區博弈交流平台</p>
-      </footer>
+      <!-- 5. 操作按鈕 -->
+      <div class="w-full max-w-md flex flex-col gap-3 mb-3">
+          <div class="flex gap-3">
+              <button onclick="drawTile()" class="flex-[3] btn-action py-5 rounded-2xl text-2xl shadow-xl active:scale-95 transition">摸牌 🀄</button>
+              <button onclick="winGame()" class="flex-1 btn-win py-5 rounded-2xl text-xl font-black active:scale-95 transition">食糊</button>
+          </div>
+          <button onclick="resetGame()" class="text-[10px] opacity-30 hover:opacity-100 transition">重新洗牌 (新局開始)</button>
+      </div>
+
+      <!-- 6. 系統紀錄 -->
+      <div class="w-full max-w-md h-20 overflow-y-auto bg-black/50 rounded-xl p-2 text-[10px] font-mono border border-white/5 custom-scroll">
+          <div id="game-logs" class="space-y-1"></div>
+      </div>
 
       <script>
-          console.log("香港人嘅四方城 2.0 啟動成功！");
+          // ==========================================
+          // 1. 【核心設定】請在此貼上你的 Firebase Config
+          // ==========================================
+          const firebaseConfig = {
+              apiKey: "你的API_KEY",
+              authDomain: "你的PROJECT_ID.firebaseapp.com",
+              databaseURL: "https://你的PROJECT_ID-default-rtdb.firebaseio.com",
+              projectId: "你的PROJECT_ID",
+              storageBucket: "你的PROJECT_ID.appspot.com",
+              messagingSenderId: "你的SENDER_ID",
+              appId: "你的APP_ID"
+          };
+
+          firebase.initializeApp(firebaseConfig);
+          const db = firebase.database();
+          const gameRef = db.ref('mahjong_hk_v7_music');
+
+          let profile = JSON.parse(localStorage.getItem('mj_v7_profile'));
+          const music = document.getElementById('bg-music');
+
+          window.onload = () => {
+              if (!profile) document.getElementById('reg-overlay').classList.remove('hidden');
+              else {
+                  updatePlayerDisplay();
+                  // 如果已經註冊過，點擊頁面任何地方即播音樂
+                  document.body.addEventListener('click', () => { if(music.paused) music.play(); }, {once: true});
+              }
+          };
+
+          function saveProfile() {
+              const name = document.getElementById('reg-name').value.trim();
+              const district = document.getElementById('reg-district').value;
+              if (!name) return alert("請輸入大名！");
+              profile = { name, district };
+              localStorage.setItem('mj_v7_profile', JSON.stringify(profile));
+              document.getElementById('reg-overlay').classList.add('hidden');
+              updatePlayerDisplay();
+              
+              // 啟動音樂
+              music.volume = 0.3; 
+              music.play().catch(e => console.log("等待交互播放"));
+              
+              addLog(`👋 [${profile.district}] ${profile.name} 加入咗四方城！`);
+          }
+
+          function toggleMusic() {
+              const btn = document.getElementById('music-btn');
+              if (music.paused) { music.play(); btn.innerText = "🎵 ON"; }
+              else { music.pause(); btn.innerText = "🔇 OFF"; }
+          }
+
+          function updatePlayerDisplay() {
+              document.getElementById('player-info').innerText = `📍 [${profile.district}] ${profile.name}`;
+          }
+
+          function vibrate(ms = 50) { if ("vibrate" in navigator) navigator.vibrate(ms); }
+
+          const tileTypes = ["🀇","🀈","🀉","🀊","🀋","🀌","🀍","🀎","🀏","🀙","🀚","🀛","🀜","🀝","🀞","🀟","🀠","🀡","🀐","🀑","🀒","🀓","🀔","🀕","🀖","🀗","🀘","🀀","🀁","🀂","🀃","🀄","🀅","🀆"];
+
+          function resetGame() {
+              if(!confirm("確定重新洗牌？")) return;
+              let deck = [];
+              tileTypes.forEach(t => { for(let i=0; i<4; i++) deck.push(t); });
+              deck.sort(() => Math.random() - 0.5);
+              gameRef.set({
+                  deck: deck, discards: [],
+                  logs: [{msg: `📣 [${profile.district}] ${profile.name} 重新洗咗牌！`, time: Date.now()}]
+              });
+              document.getElementById('my-hand').innerHTML = "";
+          }
+
+          function drawTile() {
+              vibrate(60);
+              gameRef.child('deck').once('value', snapshot => {
+                  let deck = snapshot.val();
+                  if (!deck || deck.length === 0) return alert("冇晒牌！");
+                  const tile = deck.pop();
+                  gameRef.update({ deck: deck });
+                  addLog(`🀄 [${profile.district}] ${profile.name} 摸咗牌`);
+                  const el = document.createElement('div');
+                  el.className = "tile";
+                  el.innerText = tile;
+                  el.onclick = () => { vibrate(40); if(confirm(`打出 【${tile}】？`)) discardTile(tile, el); };
+                  document.getElementById('my-hand').appendChild(el);
+              });
+          }
+
+          function discardTile(tile, el) {
+              gameRef.child('discards').once('value', snapshot => {
+                  let discards = snapshot.val() || [];
+                  discards.push({tile, user: profile.name, district: profile.district});
+                  gameRef.update({ discards });
+                  addLog(`📤 [${profile.district}] ${profile.name} 打出 【${tile}】`);
+                  el.remove();
+              });
+          }
+
+          function winGame() {
+              vibrate([200, 100, 200, 100, 300]);
+              if(confirm("確定食糊？")) {
+                  addLog(`🎉🎉🎉 [${profile.district}] ${profile.name} 食糊喇！！！ 🎉🎉🎉`);
+              }
+          }
+
+          function addLog(msg) { gameRef.child('logs').push({ msg, time: Date.now() }); }
+
+          function sortHand() {
+              vibrate(30);
+              const hand = document.getElementById('my-hand');
+              const items = Array.from(hand.children);
+              items.sort((a, b) => a.innerText.localeCompare(b.innerText, 'zh-Hans-CN-u-co-pinyin'));
+              hand.innerHTML = "";
+              items.forEach(i => hand.appendChild(i));
+          }
+
+          function clearMyHand() { if(confirm("清空手牌？")) document.getElementById('my-hand').innerHTML = ""; }
+
+          gameRef.on('value', snapshot => {
+              const data = snapshot.val();
+              if (!data) return;
+              document.getElementById('deck-count').innerText = data.deck ? data.deck.length : 0;
+              const pile = document.getElementById('discard-pile');
+              pile.innerHTML = "";
+              if (data.discards) {
+                  data.discards.forEach(item => {
+                      const d = document.createElement('div');
+                      d.className = "tile discarded";
+                      d.innerText = item.tile;
+                      pile.appendChild(d);
+                  });
+                  pile.scrollTop = pile.scrollHeight;
+              }
+              const logDiv = document.getElementById('game-logs');
+              logDiv.innerHTML = "";
+              if (data.logs) {
+                  Object.values(data.logs).slice(-15).reverse().forEach(l => {
+                      const div = document.createElement('div');
+                      if (l.msg.includes('食糊')) div.className = "winning-anim";
+                      div.innerHTML = `<span class="opacity-40 text-[9px]">${new Date(l.time).toLocaleTimeString()}</span> ${l.msg}`;
+                      logDiv.appendChild(div);
+                  });
+              }
+          });
       </script>
   </body>
   </html>
