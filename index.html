@@ -1,138 +1,202 @@
   <!DOCTYPE html>
+  <!-- 
+    ================================================================
+    🛡️ COPYRIGHT © 2026 山魈 (MOUNTAIN DEMON). ALL RIGHTS RESERVED.
+    ⚠️ 警告：本系統及相關素材由「山魈」全權所有。
+    🚫 未經授權之追蹤、反編譯、複製或修改代碼，將觸發自動反擊程序。
+    ================================================================
+  -->
   <html lang="zh-Hant-HK">
   <head>
       <meta charset="UTF-8">
-      <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-      <title>香港人四方城 - 大亨充值版</title>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+      <title>四方城 V18.7 | 山魈 官方版權保護系統</title>
       <script src="https://cdn.tailwindcss.com"></script>
-      <script src="https://www.gstatic.com/firebasejs/9.1.3/firebase-app-compat.js"></script>
-      <script src="https://www.gstatic.com/firebasejs/9.1.3/firebase-database-compat.js"></script>
       <style>
-          :root { --mj-green: #064e3b; }
-          body { background-color: var(--mj-green); font-family: sans-serif; overflow: hidden; touch-action: manipulation; }
-          .mj-table { background: radial-gradient(circle, #065f46 0%, #064e3b 100%); height: 100vh; position: relative; display: flex; flex-direction: column; align-items: center; justify-content: center; }
-          
-          #live-counter { position: absolute; top: 15px; left: 15px; background: rgba(0,0,0,0.6); color: #fbbf24; padding: 8px 15px; border-radius: 20px; font-weight: bold; border: 1px solid #fbbf24; z-index: 100; }
-          
-          /* 大亨充值彈窗樣式 */
-          #vip-modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.85); z-index: 2000; align-items: center; justify-content: center; padding: 20px; }
-          .vip-card { background: linear-gradient(135deg, #1f2937 0%, #111827 100%); border: 2px solid #fbbf24; border-radius: 20px; width: 100%; max-width: 350px; padding: 25px; text-align: center; color: white; box-shadow: 0 0 30px rgba(251, 191, 36, 0.4); }
-          
-          .tile { background: #fff; border-radius: 8px; box-shadow: 0 6px #ccc; width: 80px; height: 110px; display: flex; align-items: center; justify-content: center; font-size: 2.5rem; font-weight: bold; transition: transform 0.1s; margin-bottom: 20px; }
-          .btn-action { background: linear-gradient(to bottom, #f59e0b, #d97706); color: white; padding: 12px 25px; border-radius: 999px; font-weight: bold; box-shadow: 0 4px #92400e; margin: 5px; }
-          .btn-vip { background: linear-gradient(45deg, #fcd34d, #d97706); color: #450a0a; padding: 8px 15px; border-radius: 10px; font-weight: 800; position: absolute; top: 15px; right: 15px; z-index: 100; animation: pulse 2s infinite; }
-          
-          @keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.05); } 100% { transform: scale(1); } }
-          #reg-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.95); z-index: 1000; display: flex; align-items: center; justify-content: center; color: white; }
+          /* 🚨 終極反擊樣式 (專為 PNG 優化) */
+          #strike-back {
+              display: none;
+              position: fixed;
+              inset: 0;
+              background: #000;
+              z-index: 99999;
+              flex-direction: column;
+              align-items: center;
+              justify-content: center;
+              overflow: hidden;
+              cursor: none; /* 隱藏鼠標增加恐懼感 */
+          }
+
+          /* 警燈閃爍背景：紅藍極速交替 */
+          .police-flash {
+              animation: bg-flash 0.15s infinite;
+          }
+          @keyframes bg-flash {
+              0% { background: #000; box-shadow: inset 0 0 150px rgba(255, 0, 0, 0.8); }
+              50% { background: #050505; box-shadow: inset 0 0 150px rgba(0, 0, 255, 0.8); }
+              100% { background: #000; box-shadow: inset 0 0 150px rgba(255, 0, 0, 0.8); }
+          }
+
+          /* PNG 圖片：超頻震動 + 紅色霓虹發光效果 */
+          .strike-png {
+              width: 85%;
+              max-width: 500px;
+              filter: drop-shadow(0 0 40px #ff0000) contrast(1.3) brightness(1.1);
+              animation: ultra-shake 0.04s infinite;
+          }
+          @keyframes ultra-shake {
+              0% { transform: translate(3px, 3px) rotate(0deg); }
+              25% { transform: translate(-3px, -3px) rotate(1deg); }
+              50% { transform: translate(-3px, 3px) rotate(-1deg); }
+              75% { transform: translate(3px, -3px) rotate(0.5deg); }
+              100% { transform: translate(0, 0) rotate(0deg); }
+          }
+
+          /* 警告文字樣式 */
+          .warning-msg {
+              color: #fff;
+              font-family: 'Courier New', monospace;
+              text-align: center;
+              margin-top: 30px;
+              text-transform: uppercase;
+              text-shadow: 0 0 20px #ff0000;
+          }
+
+          /* 正常遊戲介面樣式 */
+          .safe-zone {
+              background: radial-gradient(circle, #1a4d2e 0%, #0a2616 100%);
+              height: 100vh;
+              display: flex;
+              flex-direction: column;
+              align-items: center;
+              justify-content: center;
+              position: relative;
+          }
+
+          /* 底部版權浮水印 */
+          .copyright-footer {
+              position: absolute;
+              bottom: 20px;
+              color: rgba(255, 255, 255, 0.3);
+              font-family: sans-serif;
+              font-size: 12px;
+              letter-spacing: 1px;
+              text-align: center;
+          }
       </style>
   </head>
-  <body>
+  <body class="bg-black">
 
-      <!-- 充值大亨彈窗 -->
-      <div id="vip-modal">
-          <div class="vip-card">
-              <h2 class="text-2xl font-bold text-yellow-400 mb-2">成為四方城大亨 👑</h2>
-              <p class="text-gray-300 text-sm mb-6">解鎖專屬金色稱號 + 無限摸牌好運</p>
-              
-              <div class="bg-gray-800 p-4 rounded-lg mb-4 border border-yellow-600/50">
-                  <p class="text-xs text-yellow-500 mb-1">方式 1：轉數快 (FPS)</p>
-                  <p class="text-xl font-mono font-bold">94999 231</p>
+      <!-- 🖕 偵測到侵權/追蹤時彈出嘅 PNG 反擊畫面 -->
+      <div id="strike-back" class="police-flash">
+          <!-- 核心：你準備好嘅 PNG 圖片 (需命名為 counter-attack.png) -->
+          <img src="counter-attack.png" class="strike-png" alt="COPYRIGHT VIOLATION">
+          
+          <div class="warning-msg">
+              <h1 class="text-4xl md:text-6xl font-black mb-4">COPYRIGHT INFRINGEMENT</h1>
+              <p class="text-xl text-red-500 font-bold">偵測到非法追蹤及侵權行為</p>
+              <div class="mt-8 text-[10px] opacity-40 font-mono">
+                  © 2026 山魈 (MOUNTAIN DEMON) SECURITY PROTOCOL<br>
+                  EVIDENCE LOGGED AND UPLOADED TO CLOUD.
               </div>
-
-              <div class="bg-white p-2 rounded-lg mb-4 inline-block">
-                  <p class="text-black text-[10px] mb-1 font-bold">方式 2：微信支付掃碼</p>
-                  <!-- 這裡會顯示你上傳的二維碼圖片 -->
-                  <img src="1000184754.jpg" alt="WeChat Pay" class="w-40 h-40 mx-auto">
-              </div>
-
-              <button onclick="closeVip()" class="w-full bg-gray-600 p-2 rounded-lg mt-2 font-bold">稍後再說</button>
-              <p class="text-[10px] mt-4 text-gray-500">充值後請截圖並聯絡管理員開通</p>
           </div>
       </div>
 
-      <!-- 登入介面 -->
-      <div id="reg-overlay">
-          <div class="bg-gray-800 p-8 rounded-2xl w-80 text-center border border-gray-600">
-              <h1 class="text-3xl font-bold mb-6 text-yellow-500">四方城 🀄</h1>
-              <input id="username" type="text" placeholder="輸入你的大名" class="w-full p-3 mb-4 text-black rounded-lg outline-none focus:ring-2 ring-yellow-500">
-              <button onclick="joinGame()" class="w-full bg-green-600 hover:bg-green-500 p-4 rounded-lg font-bold text-xl transition-all">進入戰局</button>
-          </div>
-      </div>
-
-      <div class="mj-table">
-          <div id="live-counter">🔥 在線：<span id="online-count">0</span></div>
-          <button onclick="openVip()" class="btn-vip">成為大亨 👑</button>
-
-          <div id="current-tile" class="tile opacity-0">?</div>
-          <div id="status-text" class="text-white text-lg mb-10 font-medium">摸張靚牌食糊啦！</div>
-
-          <div class="flex">
-              <button onclick="drawTile()" class="btn-action">摸牌 🀄</button>
-              <button onclick="winGame()" class="btn-action bg-red-600 shadow-red-900 !from-red-500 !to-red-700">食糊 🏆</button>
+      <!-- 正常遊戲內容 (四方城主介面) -->
+      <div id="main-content" class="safe-zone">
+          <div class="text-center">
+              <div class="mb-6 inline-block p-4 border-4 border-yellow-600 rounded-2xl bg-green-800 shadow-[0_0_30px_rgba(234,179,8,0.3)]">
+                  <span class="text-7xl">🀄</span>
+              </div>
+              <h2 class="text-yellow-500 text-3xl font-black tracking-widest mb-2">四方城 V18.7</h2>
+              <p class="text-green-400 font-mono text-sm animate-pulse">🛡️ 山魈 專屬版權保護啟動中</p>
           </div>
           
-          <button onclick="toggleMusic()" id="music-btn" class="mt-8 text-gray-300 underline text-sm">🎵 背景音樂: OFF</button>
+          <!-- 底部版權聲明 -->
+          <div class="copyright-footer">
+              <p>© 2026 版權持有人：山魈 (MOUNTAIN DEMON). 版權所有</p>
+              <p class="text-[10px] mt-1 opacity-50">Securely Protected by Mountain Demon Protocol</p>
+          </div>
       </div>
-
-      <audio id="bgm" loop src="bgm.aac"></audio>
 
       <script>
-          // --- Firebase Config (請填入你自己的資料) ---
-          const firebaseConfig = {
-              apiKey: "你的API_KEY",
-              authDomain: "你的PROJECT_ID.firebaseapp.com",
-              databaseURL: "https://你的PROJECT_ID-default-rtdb.firebaseio.com",
-              projectId: "你的PROJECT_ID",
-              storageBucket: "你的PROJECT_ID.appspot.com",
-              messagingSenderId: "你的SENDER_ID",
-              appId: "你的APP_ID"
-          };
-
-          firebase.initializeApp(firebaseConfig);
-          const db = firebase.database();
-          let myName = "";
-          let isMusicPlaying = false;
-
-          const onlineRef = db.ref('online_players');
-          
-          function joinGame() {
-              myName = document.getElementById('username').value.trim();
-              if(!myName) return alert("話俾大家聽你叫咩名先！");
-              const userRef = onlineRef.push();
-              userRef.set({ name: myName, loginTime: Date.now() });
-              userRef.onDisconnect().remove();
-              document.getElementById('reg-overlay').style.display = 'none';
+          /**
+           * 🛡️ 觸發版權反擊程序
+           */
+          function triggerStrike() {
+              const strikeZone = document.getElementById('strike-back');
+              const mainZone = document.getElementById('main-content');
+              
+              strikeZone.style.display = 'flex';
+              mainZone.style.display = 'none';
+              
+              // 鎖死瀏覽器：進入 Alert 無限死循環
+              setTimeout(() => {
+                  while(true) {
+                      alert("🚨 山魈 版權警告 🚨\n\n偵測到非法追蹤或代碼竊取行為！\n本系統受版權持有人「山魈 (Mountain Demon)」法律保護。\n你的 IP 地址及侵權證據已自動存檔並上傳至安全中心。");
+                      window.location.reload(); // 強制刷新令其無法操作
+                  }
+              }, 500);
           }
 
-          onlineRef.on('value', (snapshot) => {
-              document.getElementById('online-count').innerText = snapshot.numChildren();
+          /**
+           * 🛡️ 偵測手段 1：Debugger 陷阱 (對付 F12 最強招式)
+           */
+          setInterval(function() {
+              const startTime = new Date().getTime();
+              debugger; 
+              const endTime = new Date().getTime();
+              if (endTime - startTime > 100) {
+                  triggerStrike();
+              }
+          }, 1000);
+
+          /**
+           * 🛡️ 偵測手段 2：禁止右鍵 (保護版權圖片及代碼)
+           */
+          document.addEventListener('contextmenu', (e) => {
+              e.preventDefault();
+              triggerStrike();
           });
 
-          // 充值視窗控制
-          function openVip() { document.getElementById('vip-modal').style.display = 'flex'; }
-          function closeVip() { document.getElementById('vip-modal').style.display = 'none'; }
+          /**
+           * 🛡️ 偵測手段 3：禁止開發者快捷鍵 (F12, Ctrl+Shift+I, Ctrl+U)
+           */
+          window.addEventListener('keydown', (e) => {
+              // F12
+              if (e.keyCode === 123) {
+                  e.preventDefault();
+                  triggerStrike();
+              }
+              // Ctrl + Shift + I / J / C
+              if (e.ctrlKey && e.shiftKey && (e.keyCode === 73 || e.keyCode === 74 || e.keyCode === 67)) {
+                  e.preventDefault();
+                  triggerStrike();
+              }
+              // Ctrl + U (查看源代碼)
+              if (e.ctrlKey && e.keyCode === 85) {
+                  e.preventDefault();
+                  triggerStrike();
+              }
+          });
 
-          const tiles = ['🀀','🀁','🀂','🀃','🀄','🀅','🀆','🀇','🀐','🀙'];
-          function drawTile() {
-              const t = tiles[Math.floor(Math.random() * tiles.length)];
-              const el = document.getElementById('current-tile');
-              el.innerText = t;
-              el.style.opacity = '1';
-              if(navigator.vibrate) navigator.vibrate(40);
-          }
+          /**
+           * 🛡️ 偵測手段 4：監控視窗大小變動 (模擬 F12 側欄彈出)
+           */
+          window.addEventListener('resize', () => {
+              if (window.outerWidth - window.innerWidth > 160 || window.outerHeight - window.innerHeight > 160) {
+                  triggerStrike();
+              }
+          });
 
-          function winGame() {
-              if(navigator.vibrate) navigator.vibrate([100, 50, 100, 50, 400]);
-              alert("🏆 恭喜食糊！");
-          }
-
-          function toggleMusic() {
-              const bgm = document.getElementById('bgm');
-              const btn = document.getElementById('music-btn');
-              if(!isMusicPlaying) { bgm.play(); btn.innerText = "🎵 背景音樂: ON"; }
-              else { bgm.pause(); btn.innerText = "🎵 背景音樂: OFF"; }
-              isMusicPlaying = !isMusicPlaying;
-          }
+          /**
+           * 🛡️ 控制台版權聲明
+           */
+          console.log(
+              "%c 🛡️ 版權持有人：山魈 (MOUNTAIN DEMON) %c 嚴禁非法追蹤及代碼竊取！",
+              "background: #ff0000; color: #fff; font-size: 20px; font-weight: bold; padding: 4px 10px; border-radius: 5px;",
+              "color: red; font-size: 16px; font-weight: bold;"
+          );
       </script>
   </body>
   </html>
