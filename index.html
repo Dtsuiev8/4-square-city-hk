@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="zh-HK">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>香港人嘅四方城 | 18區爭霸戰</title>
+    <!-- 使用 Tailwind CSS 快速美化介面 -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+HK:wght@400;700;900&display=swap');
+        body { 
+            font-family: 'Noto Sans HK', sans-serif; 
+            background-color: #064e3b; 
+            color: #f0fdf4; 
+            background-image: radial-gradient(circle at center, #065f46 0%, #064e3b 100%);
+        }
+        .neon-text { 
+            text-shadow: 0 0 10px #34d399, 0 0 20px #10b981; 
+        }
+        .glass-card {
+            background: rgba(0, 0, 0, 0.4);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(52, 211, 153, 0.3);
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col items-center justify-center p-6 text-center">
+    
+    <div class="max-w-2xl w-full glass-card p-10 rounded-[2rem] shadow-2xl">
+        <!-- 標題部分 -->
+        <h1 class="text-5xl md:text-6xl font-black mb-4 neon-text italic tracking-tighter">
+            香港人嘅四方城
+        </h1>
+        <p class="text-xl md:text-2xl mb-10 text-emerald-200 font-light">
+            真正屬於 18 區嘅麻雀競技平台
+        </p>
+        
+        <!-- 特色簡介 -->
+        <div class="grid gap-4 mb-12 text-left">
+            <div class="bg-emerald-900/40 p-5 rounded-2xl border-l-4 border-yellow-400">
+                <h2 class="text-xl font-bold text-yellow-400 mb-1">🀄 正宗港麻邏輯</h2>
+                <p class="text-emerald-100/80 text-sm">由資深雀友研發，還原最真實嘅食糊感。</p>
+            </div>
+            <div class="bg-emerald-900/40 p-5 rounded-2xl border-l-4 border-emerald-400">
+                <h2 class="text-xl font-bold text-emerald-300 mb-1">🔥 18 區榮譽戰</h2>
+                <p class="text-emerald-100/80 text-sm">代表你住嗰區出戰，爭奪「全港最強地區」稱號！</p>
+            </div>
+        </div>
+
+        <!-- 行動按鈕 -->
+        <div class="space-y-6">
+            <p class="text-lg font-medium text-emerald-200">立即預約加入首批「大亨」行列：</p>
+            
+            <a href="https://wa.me/85294999231" target="_blank" 
+               class="group relative block w-full bg-emerald-500 hover:bg-emerald-400 text-emerald-950 font-black py-5 rounded-2xl transition-all transform hover:scale-[1.02] active:scale-95 text-2xl shadow-[0_0_20px_rgba(16,185,129,0.4)]">
+                WhatsApp 預約 (D Tsui)
+            </a>
+
+            <div class="pt-4 border-t border-emerald-800/50">
+                <p class="text-sm text-emerald-400/70 mb-1">如有查詢請聯絡：</p>
+                <p class="text-emerald-200 font-mono">dtsui88117@gmail.com</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- 頁尾 -->
+    <footer class="mt-12 text-emerald-600/60 text-xs tracking-widest uppercase">
+        © 2026 4 Square City HK • Project Managed by D Tsui
+    </footer>
+
+</body>
+</html>
